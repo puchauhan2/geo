@@ -1,7 +1,7 @@
 var express    = require('express');
 var app      = express();
 var bodyParser   = require('body-parser');
-var db       = require('./config/db.js');
+
 var config       = require('./config/config.json');
 
 // parse application/x-www-form-urlencoded
@@ -24,6 +24,5 @@ var env = {
 var port = config.PORT;
 
 app.listen(port,function () {
-  console.log('Server listening on port '+port);
-  console.log('with follwing environment '+JSON.stringify(env))
+
 })
