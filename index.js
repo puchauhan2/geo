@@ -1,15 +1,29 @@
-'use strict';
+var express    = require('express');
+var app      = express();
+var bodyParser   = require('body-parser');
+var db       = require('./config/db.js');
+var config       = require('./config/config.json');
 
-var fs = require('fs');
-var path = require('path');
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+ 
+// parse application/json
+app.use(bodyParser.json());
 
-exports.get = function(event, context, callback) {
-  var contents = fs.readFileSync(`public${path.sep}index.html`);
-  var result = {
-    statusCode: 200,
-    body: contents.toString(),
-    headers: {'content-type': 'text/html'}
-  };
+app.use(express.static(__dirname + '/public'));
 
-  callback(null, result);
-};
+//load our routes and pass in our app and fully configured passport
+require('./config/routes.js')(app);
+
+var env = {
+  "title"   : process.title,
+  "version" : process.version,
+  "platform"  : process.platform
+}
+
+var port = config.PORT;
+
+app.listen(port,function () {
+  console.log('Server listening on port '+port);
+  console.log('with follwing environment '+JSON.stringify(env))
+})
